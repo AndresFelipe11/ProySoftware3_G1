@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryStore;
 use App\Models\Category;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::orderBy('category_name', 'asc')->paginate(10);
+        return view('dashboard.categories.index', ['categories' => $categories]);
     }
 
     /**
@@ -24,7 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('dashboard.categories.create', ['category' => new Category()]);
     }
 
     /**
@@ -33,9 +35,10 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryStore $request)
     {
-        //
+        Category::create($request->validated());
+        return back()->with('status', 'Categoría generada con éxito');
     }
 
     /**
@@ -46,7 +49,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('dashboard.categories.show', ['category' => $category]);
     }
 
     /**
@@ -57,7 +60,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('dashboard.categories.edit', ['category' => $category]);
     }
 
     /**
@@ -67,9 +70,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryStore $request, Category $category)
     {
-        //
+        $category->update($request->validated());
+        return back()->with('status', 'Categoría actualizada con éxito');
     }
 
     /**
@@ -80,6 +84,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return back()->with('status', 'Categoría eliminada con éxito');
     }
 }

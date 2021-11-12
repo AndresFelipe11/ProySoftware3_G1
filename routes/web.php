@@ -1,8 +1,9 @@
 <?php
 
-use App\Http\Controllers\PostController;
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Route;
+use PHPUnit\TextUI\XmlConfiguration\Group;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,10 +20,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-//route:group
-Route::prefix('dashboard')->group(function(){
-
-    //route:resource
-    Route::resource('post',PostController::class);
-    Route::resource('category',CategoryController::class);
+Route::prefix('dashboard')->group(function () {
+    Route::resource('posts', PostsController::class);
+    Route::resource('category', CategoryController::class);
 });
